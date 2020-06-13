@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>HumanResource.DataElements</AssemblyName>
+    <RootNamespace>HumanResource.DataElements</RootNamespace>
+  </PropertyGroup>
+
+</Project>
