@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "HumanResource.DataGenerator": {
+      "commandName": "Project",
+      "commandLineArgs": "-s 25 -o data.json"
+    }
+  }
+}
