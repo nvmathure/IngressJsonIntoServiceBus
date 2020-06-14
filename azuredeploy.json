@@ -2,23 +2,23 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "location" : {
-            "type" : "String",
-            "defaultValue" : "[resourceGroup().location]"
+        "location": {
+            "type": "String",
+            "defaultValue": "[resourceGroup().location]"
         },
-        "resourceSuffix" : {
-            "type" : "string",
-            "defaultValue" : "[uniqueString(utcNow())]"
+        "resourceSuffix": {
+            "type": "string",
+            "defaultValue": "[uniqueString(utcNow())]"
         }
     },
     "variables": {
-        "resourceSuffix" : "[parameters('resourceSuffix')]",
-        "applicationName" : "longRunningFunctionApp",
-        "applicationInsightsName" : "[concat('ai-', variables('applicationName'), '-', variables('resourceSuffix'))]",
-        "serviceBusNamespace" : "[concat('sb-', variables('applicationName'), '-', variables('resourceSuffix'))]",
-        "storageAccount" : "[toLower(replace(concat('sa-lrfa', '-', variables('resourceSuffix')), '-', ''))]",
-        "appServicePlan" : "[concat('asp-', variables('applicationName'), '-', variables('resourceSuffix'))]",
-        "functionAppName" : "[concat('fa-', variables('applicationName'), '-', variables('resourceSuffix'))]"
+        "resourceSuffix": "[parameters('resourceSuffix')]",
+        "applicationName": "longRunningFunctionApp",
+        "applicationInsightsName": "[concat('ai-', variables('applicationName'), '-', variables('resourceSuffix'))]",
+        "serviceBusNamespace": "[concat('sb-', variables('applicationName'), '-', variables('resourceSuffix'))]",
+        "storageAccount": "[toLower(replace(concat('sa-lrfa', '-', variables('resourceSuffix')), '-', ''))]",
+        "appServicePlan": "[concat('asp-', variables('applicationName'), '-', variables('resourceSuffix'))]",
+        "functionAppName": "[concat('fa-', variables('applicationName'), '-', variables('resourceSuffix'))]"
     },
     "resources": [
         {
@@ -60,8 +60,10 @@
                 "largeFileSharesState": "Disabled",
                 "networkAcls": {
                     "bypass": "AzureServices",
-                    "virtualNetworkRules": [],
-                    "ipRules": [],
+                    "virtualNetworkRules": [
+                    ],
+                    "ipRules": [
+                    ],
                     "defaultAction": "Allow"
                 },
                 "supportsHttpsTrafficOnly": true,
@@ -134,7 +136,8 @@
             },
             "properties": {
                 "cors": {
-                    "corsRules": []
+                    "corsRules": [
+                    ]
                 },
                 "deleteRetentionPolicy": {
                     "enabled": false
@@ -154,7 +157,8 @@
             },
             "properties": {
                 "cors": {
-                    "corsRules": []
+                    "corsRules": [
+                    ]
                 }
             }
         },
@@ -165,7 +169,8 @@
             "location": "[parameters('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlan'))]",
-                "[resourceId('Microsoft.Insights/components', variables('applicationInsightsName'))]"
+                "[resourceId('Microsoft.Insights/components', variables('applicationInsightsName'))]",
+                "[resourceId('Microsoft.ServiceBus/namespaces/AuthorizationRules', variables('serviceBusNamespace'), 'RootManageSharedAccessKey')]"
             ],
             "kind": "functionapp",
             "properties": {
@@ -211,8 +216,12 @@
                         {
                             "name": "AzureWebJobsDashboard",
                             "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccount'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccount')) ,'2019-06-01').keys[0].value, ';EndpointSuffix=core.windows.net')]"
+                        },
+                        {
+                            "name": "AzureServiceBus",
+                            "value": "[listKeys(resourceId('Microsoft.ServiceBus/namespaces/AuthorizationRules', variables('serviceBusNamespace'), 'RootManageSharedAccessKey') ,'2017-04-01').primaryConnectionString]"
                         }
-                    ]                    
+                    ]
                 },
                 "scmSiteAlsoStopped": false,
                 "clientAffinityEnabled": true,
@@ -266,7 +275,8 @@
                 ],
                 "loadBalancing": "LeastRequests",
                 "experiments": {
-                    "rampUpRules": []
+                    "rampUpRules": [
+                    ]
                 },
                 "autoHealEnabled": false,
                 "cors": {
@@ -329,6 +339,18 @@
             }
         },
         {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2019-06-01",
+            "name": "[concat(variables('storageAccount'), '/default/logs')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('storageAccount'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccount'))]"
+            ],
+            "properties": {
+                "publicAccess": "None"
+            }
+        },
+        {
             "type": "Microsoft.Storage/storageAccounts/fileServices/shares",
             "apiVersion": "2019-06-01",
             "name": "[concat(variables('storageAccount'), '/default/fa-longrunningfunctionappb16a')]",
@@ -341,14 +363,14 @@
             }
         },
         {
-            "type" : "Microsoft.ServiceBus/namespaces/queues",
-            "name" : "[concat(variables('serviceBusNamespace'), '/requests')]",
-            "apiVersion" : "2017-04-01",
-            "properties" : {
+            "type": "Microsoft.ServiceBus/namespaces/queues",
+            "name": "[concat(variables('serviceBusNamespace'), '/requests')]",
+            "apiVersion": "2017-04-01",
+            "properties": {
                 "lockDuration": "PT5M",
-                "defaultMessageTimeToLive" : "P10D"
+                "defaultMessageTimeToLive": "P10D"
             },
-            "dependsOn" : [
+            "dependsOn": [
                 "[resourceId('Microsoft.ServiceBus/namespaces', variables('serviceBusNamespace'))]"
             ]
         }
