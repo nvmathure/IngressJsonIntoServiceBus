@@ -373,21 +373,6 @@
             "dependsOn": [
                 "[resourceId('Microsoft.ServiceBus/namespaces', variables('serviceBusNamespace'))]"
             ]
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(variables('functionAppName'), '/', uniqueString(utcNow()))]",
-            "location": "[parameters('location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
-            ],
-            "properties": {
-                "author_email": "nandanmathure@gmail.com",
-                "author": "nandanmathure@gmail.com",
-                "deployer": "GitHub",
-                "active": true
-            }
         }
     ]
 }
