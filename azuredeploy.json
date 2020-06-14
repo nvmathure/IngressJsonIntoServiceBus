@@ -164,7 +164,7 @@
         },
         {
             "type": "Microsoft.Web/sites",
-            "apiVersion": "2018-11-01",
+            "apiVersion": "2019-08-01",
             "name": "[variables('functionAppName')]",
             "location": "[parameters('location')]",
             "dependsOn": [
@@ -231,22 +231,7 @@
                 "dailyMemoryTimeQuota": 0,
                 "httpsOnly": false,
                 "redundancyMode": "None"
-            },
-            "resources": [
-                {
-                    "apiVersion": "2015-08-01",
-                    "name": "web",
-                    "type": "sourcecontrols",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Web/Sites', variables('functionAppName'))]"
-                    ],
-                    "properties": {
-                        "RepoUrl": "[parameters('https://github.com/nvmathure/LongRunningAzureFunction.git')]",
-                        "branch": "[parameters('FirstBuild')]",
-                        "IsManualIntegration": true
-                    }
-                }
-            ]
+            }
         },
         {
             "type": "Microsoft.Web/sites/config",
