@@ -1,5 +1,5 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "location": {
@@ -231,7 +231,22 @@
                 "dailyMemoryTimeQuota": 0,
                 "httpsOnly": false,
                 "redundancyMode": "None"
-            }
+            },
+            "resources": [
+                {
+                    "apiVersion": "2015-08-01",
+                    "name": "web",
+                    "type": "sourcecontrols",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', variables('functionAppName'))]"
+                    ],
+                    "properties": {
+                        "RepoUrl": "[parameters('https://github.com/nvmathure/LongRunningAzureFunction.git')]",
+                        "branch": "[parameters('FirstBuild')]",
+                        "IsManualIntegration": true
+                    }
+                }
+            ]
         },
         {
             "type": "Microsoft.Web/sites/config",
