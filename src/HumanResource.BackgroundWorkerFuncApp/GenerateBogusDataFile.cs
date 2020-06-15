@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using HumanResource.DataGenerator;
 using Newtonsoft.Json.Serialization;
+using System;
 
 namespace HumanResource.BackgroundWorkerFuncApp
 {
@@ -19,19 +20,29 @@ namespace HumanResource.BackgroundWorkerFuncApp
                 AuthorizationLevel.Anonymous, 
                 "post", Route = null)]HttpRequest request,
             IBinder binder,
-            [Blob(
-                "logs/{name}",
-                FileAccess.Write,
-                Connection = "AzureWebJobsStorage")]Stream logStream,
             ILogger log)
         {
-
-            var requestData = new GenerateBogusDataFileRequest();
-
+            GenerateBogusDataFileRequest requestData;
+            try
+            {
+                string requestBody = await new StreamReader(request.Body).ReadToEndAsync();
+                requestData = 
+                    JsonConvert.DeserializeObject<GenerateBogusDataFileRequest>(
+                        requestBody, 
+                        new JsonSerializerSettings()
+                        {
+                            ContractResolver = new CamelCasePropertyNamesContractResolver()
+                        });
+            }
+            catch(Exception e)
+            {
+                return new BadRequestObjectResult(e.Message);
+            };
+            
             var data = EmployeeDataGenerator.GenerateData(requestData.SampleSize);
             using (var fileStream = await binder.BindAsync<TextWriter>(
                 new BlobAttribute(
-                    $"logs/{requestData.FileName}.json",
+                    $"file-drop/{requestData.FileName}.json",
                     FileAccess.Write)
                 {
                     Connection = "AzureWebJobsStorage"
