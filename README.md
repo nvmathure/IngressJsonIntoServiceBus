@@ -10,7 +10,7 @@ The application contains two azure functions. First one, named "GenerateBogusDat
 [![Deploy](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnvmathure%2FIngressJsonIntoServiceBus%2Fmaster%2Fazuredeploy.json) [![Visualize](http://armviz.io/visualizebutton.png)](http://armviz.io/#/?load=https://raw.githubusercontent.com/nvmathure/IngressJsonIntoServiceBus/master/azuredeploy.json)
 
 ### Step 2 - Run test
-Use Powershell to invoke function "GenerateBogusDataFile"
+Use Powershell to invoke function "GenerateBogusDataFile". Change the URI to point to your deployment.
 ``` PowerShell
 Invoke-WebRequest `
     -Uri http://localhost:7071/api/GenerateBogusDataFile `
