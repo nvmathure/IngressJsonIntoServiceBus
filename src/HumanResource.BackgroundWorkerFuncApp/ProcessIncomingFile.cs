@@ -15,23 +15,23 @@ namespace HumanResource.BackgroundWorkerFuncApp
 {
     public static class ProcessIncomingFile
     {
-        [FunctionName("ProcessIncomingFileParallelAsync")]
-        public static async Task ParallelAsyncRun(
-            [BlobTrigger(
-                "file-drop/{name}",
-                Connection = "AzureWebJobsStorage")]Stream blob,
-            [ServiceBus(
-                "requests",
-                Connection = "AzureServiceBus")]IAsyncCollector<Employee> messages,
-            [Blob(
-                "logs/Parallel{name}",
-                FileAccess.Write,
-                Connection = "AzureWebJobsStorage")]Stream logStream,
-            string name,
-            ILogger log)
-        {
-            await CoreProcessing(blob, messages, logStream, name, ParallelAsyncProcessing);
-        }
+        //[FunctionName("ProcessIncomingFileParallelAsync")]
+        //public static async Task ParallelAsyncRun(
+        //    [BlobTrigger(
+        //        "file-drop/{name}",
+        //        Connection = "AzureWebJobsStorage")]Stream blob,
+        //    [ServiceBus(
+        //        "requests",
+        //        Connection = "AzureServiceBus")]IAsyncCollector<Employee> messages,
+        //    [Blob(
+        //        "logs/Parallel{name}",
+        //        FileAccess.Write,
+        //        Connection = "AzureWebJobsStorage")]Stream logStream,
+        //    string name,
+        //    ILogger log)
+        //{
+        //    await CoreProcessing(blob, messages, logStream, name, ParallelAsyncProcessing);
+        //}
 
         [FunctionName("ProcessIncomingFileAsync")]
         public static async Task AsyncRun(
