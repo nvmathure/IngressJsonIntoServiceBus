@@ -4,9 +4,6 @@
     "parameters": {
         "location": {
             "value": "East US"
-        },
-        "resourceSuffix" : {
-            "value": "E"
         }
     }
 }

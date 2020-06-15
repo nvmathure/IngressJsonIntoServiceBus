@@ -12,10 +12,10 @@ using Newtonsoft.Json.Serialization;
 
 namespace HumanResource.BackgroundWorkerFuncApp
 {
-    public static class BackgroundWorker
+    public static class ProcessIncomingFile
     {
         [FunctionName("ProcessIncomingFile")]
-        public static async Task ProcessIncomingFile(
+        public static async Task Run(
             [BlobTrigger(
                 "file-drop/{name}",
                 Connection = "AzureWebJobsStorage")]Stream blob,

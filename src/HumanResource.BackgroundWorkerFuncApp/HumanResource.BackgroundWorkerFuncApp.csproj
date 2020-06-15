@@ -11,6 +11,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HumanResource.DataElements\HumanResource.DataElements.csproj" />
+    <ProjectReference Include="..\HumanResource.DataGenerator\HumanResource.DataGenerator.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">
