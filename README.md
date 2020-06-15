@@ -7,7 +7,7 @@ The application contains two azure functions. First one, named "GenerateBogusDat
 
 ### Step 1 - Create Azure Resources and Deploy Code
 
-[![Deploy](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnvmathure%2FIngressJsonIntoServiceBus%2FMaster%2Fazuredeploy.json) [![Visualize](http://armviz.io/visualizebutton.png)](http://armviz.io/#/?load=https://raw.githubusercontent.com/nvmathure/IngressJsonIntoServiceBus/Master/azuredeploy.json)
+[![Deploy](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnvmathure%2FIngressJsonIntoServiceBus%2Fmaster%2Fazuredeploy.json) [![Visualize](http://armviz.io/visualizebutton.png)](http://armviz.io/#/?load=https://raw.githubusercontent.com/nvmathure/IngressJsonIntoServiceBus/master/azuredeploy.json)
 
 ### Step 2 - Run test
 Use Powershell to invoke function "GenerateBogusDataFile"
